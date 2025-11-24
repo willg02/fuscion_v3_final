@@ -9,20 +9,20 @@ const Header = () => {
   };
 
   return (
-    <header className="py-12 px-6 border-b border-[#E4E0D8] bg-[#FAFAF8]">
+    <header className="py-8 md:py-12 px-4 md:px-6 border-b border-[#E4E0D8] bg-[#FAFAF8]">
       <div className="max-w-7xl mx-auto">
         {/* Logo and Tagline */}
-        <div className="text-center mb-12">
-          <h1 className="text-[48px] font-semibold mb-3 tracking-[-0.02em]" style={{ color: '#1A1A1A' }}>
-            FUSCION<sup className="text-[14px] font-light ml-0.5">TM</sup>
+        <div className="text-center mb-8 md:mb-12">
+          <h1 className="text-[36px] md:text-[48px] font-semibold mb-2 md:mb-3 tracking-[-0.02em]" style={{ color: '#1A1A1A' }}>
+            FUSCION<sup className="text-[12px] md:text-[14px] font-light ml-0.5">TM</sup>
           </h1>
-          <p className="text-[22px] font-light tracking-wide" style={{ color: '#4F4F4F' }}>
+          <p className="text-[18px] md:text-[22px] font-light tracking-wide px-4" style={{ color: '#4F4F4F' }}>
             Flow gently into a healthy, meaningful life.
           </p>
         </div>
 
         {/* Navigation */}
-        <nav className="flex justify-center gap-10 text-[15px] font-medium">
+        <nav className="flex flex-wrap justify-center gap-4 md:gap-10 text-[14px] md:text-[15px] font-medium">
           <button 
             onClick={() => scrollToSection('home')} 
             className="hover:underline transition-all duration-200 tracking-wide"
@@ -39,7 +39,7 @@ const Header = () => {
           </button>
           <button 
             onClick={() => scrollToSection('what-i-do')} 
-            className="hover:underline transition-all duration-200 tracking-wide"
+            className="hover:underline transition-all duration-200 tracking-wide whitespace-nowrap"
             style={{ color: '#1A1A1A' }}
           >
             What I Do
