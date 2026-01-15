@@ -36,7 +36,7 @@ const About = () => {
             </p>
             
             <p className="text-[19px] leading-[1.8]">
-              For over a decade, I practiced family medicine, working with patients navigating chronic illness, 
+              For over a decade, I practiced medicine, working with patients navigating chronic illness, 
               burnout, and the quiet unraveling that happens when life moves faster than the soul can follow.
             </p>
             

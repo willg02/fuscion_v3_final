@@ -25,13 +25,13 @@ const Writings = () => {
     {
       title: "Movement is Life!",
       source: "Seniors Engage",
-      url: "https://seniorsengage.com",
+      url: "https://www.seniorsengage.com/news_development/movement-is-life/",
       description: "Exploring the vital connection between physical movement and living a full, vibrant life."
     },
     {
       title: "Movement is Our Nature",
       source: "All About Seniors",
-      url: "https://allaboutseniors.org",
+      url: "https://www.allaboutseniors.org/movement-is-our-nature",
       description: "Understanding how movement is fundamental to our human experience and well-being."
     }
   ];
