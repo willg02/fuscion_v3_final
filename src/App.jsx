@@ -4,6 +4,7 @@ import Gateway from './components/Gateway';
 import About from './components/About';
 import WhatIDo from './components/WhatIDo';
 import Philosophy from './components/Philosophy';
+import Writings from './components/Writings';
 import Connect from './components/Connect';
 import Footer from './components/Footer';
 
@@ -21,6 +22,7 @@ function App() {
         <About />
         <WhatIDo />
         <Philosophy />
+        <Writings />
         <Connect />
       </main>
       <Footer />
