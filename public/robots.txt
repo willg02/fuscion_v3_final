@@ -1,0 +1,6 @@
+# robots.txt for FUSCION
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://fuscion.life/sitemap.xml
