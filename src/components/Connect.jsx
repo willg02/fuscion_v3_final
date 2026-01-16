@@ -8,8 +8,11 @@ const Connect = () => {
     message: ''
   });
   const [formData2, setFormData2] = useState({
+    email: '',
     reflection: ''
   });
+  const [submitStatus1, setSubmitStatus1] = useState({ loading: false, success: false, error: '' });
+  const [submitStatus2, setSubmitStatus2] = useState({ loading: false, success: false, error: '' });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -29,22 +32,57 @@ const Connect = () => {
     return () => observer.disconnect();
   }, []);
 
-  const handleScheduleCall = (e) => {
+  const handleScheduleCall = async (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent('Schedule a Private Alignment Conversation');
-    const body = encodeURIComponent(
-      `Name: ${formData1.name}\nEmail: ${formData1.email}\n\nMessage:\n${formData1.message}`
-    );
-    window.location.href = `mailto:drdalsania@fuscion.com?subject=${subject}&body=${body}`;
+    setSubmitStatus1({ loading: true, success: false, error: '' });
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData1.name,
+          email: formData1.email,
+          message: formData1.message,
+          formType: 'alignment'
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitStatus1({ loading: false, success: true, error: '' });
+        setFormData1({ name: '', email: '', message: '' });
+      } else {
+        throw new Error('Failed to send');
+      }
+    } catch (error) {
+      setSubmitStatus1({ loading: false, success: false, error: 'Something went wrong. Please try again or email directly.' });
+    }
   };
 
-  const handleJoinJourney = (e) => {
+  const handleJoinJourney = async (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent('Join the Journey');
-    const body = encodeURIComponent(
-      `My reflection:\n\n${formData2.reflection}`
-    );
-    window.location.href = `mailto:drdalsania@fuscion.com?subject=${subject}&body=${body}`;
+    setSubmitStatus2({ loading: true, success: false, error: '' });
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData2.email,
+          message: formData2.reflection,
+          formType: 'journey'
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitStatus2({ loading: false, success: true, error: '' });
+        setFormData2({ email: '', reflection: '' });
+      } else {
+        throw new Error('Failed to send');
+      }
+    } catch (error) {
+      setSubmitStatus2({ loading: false, success: false, error: 'Something went wrong. Please try again.' });
+    }
   };
 
   return (
@@ -79,58 +117,72 @@ const Connect = () => {
             Schedule a Private Alignment Conversation
           </h3>
           
-          <form onSubmit={handleScheduleCall} className="space-y-6 max-w-[540px] mx-auto">
-            <div>
-              <label htmlFor="name" className="block text-[14px] mb-2 text-warm-grey">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                required
-                value={formData1.name}
-                onChange={(e) => setFormData1({ ...formData1, name: e.target.value })}
-                className="w-full px-5 py-4 border-2 border-[#E4E0D8] rounded-sm bg-white focus:bg-[#FAFAF8] focus:border-[#4A4A4A] focus:outline-none transition-all text-[16px]"
-              />
+          {submitStatus1.success ? (
+            <div className="text-center py-12 px-8 rounded-sm" style={{ backgroundColor: 'rgba(228, 224, 216, 0.3)' }}>
+              <p className="text-[20px] font-medium text-[#1A1A1A] mb-2">Thank you for reaching out.</p>
+              <p className="text-[16px] text-warm-grey">Dr. Dalsania will be in touch soon.</p>
             </div>
-            
-            <div>
-              <label htmlFor="email" className="block text-[14px] mb-2 text-warm-grey">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                required
-                value={formData1.email}
-                onChange={(e) => setFormData1({ ...formData1, email: e.target.value })}
-                className="w-full px-5 py-4 border-2 border-[#E4E0D8] rounded-sm bg-white focus:bg-[#FAFAF8] focus:border-[#4A4A4A] focus:outline-none transition-all text-[16px]"
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="message" className="block text-[14px] mb-2 text-warm-grey">
-                What brings you here?
-              </label>
-              <textarea
-                id="message"
-                rows="5"
-                required
-                value={formData1.message}
-                onChange={(e) => setFormData1({ ...formData1, message: e.target.value })}
-                className="w-full px-5 py-4 border-2 border-[#E4E0D8] rounded-sm bg-white focus:bg-[#FAFAF8] focus:border-[#4A4A4A] focus:outline-none transition-all resize-none text-[16px] leading-[1.7]"
-              ></textarea>
-            </div>
-            
-            <div className="text-center">
-              <button type="submit" className="button-primary">
-                Send Message
-              </button>
-              <p className="text-[14px] text-warm-grey mt-4">
-                Or email directly: <a href="mailto:drdalsania@fuscion.com" className="underline">drdalsania@fuscion.com</a>
-              </p>
-            </div>
-          </form>
+          ) : (
+            <form onSubmit={handleScheduleCall} className="space-y-6 max-w-[540px] mx-auto">
+              <div>
+                <label htmlFor="name" className="block text-[14px] mb-2 text-warm-grey">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  required
+                  value={formData1.name}
+                  onChange={(e) => setFormData1({ ...formData1, name: e.target.value })}
+                  className="w-full px-5 py-4 border-2 border-[#E4E0D8] rounded-sm bg-white focus:bg-[#FAFAF8] focus:border-[#4A4A4A] focus:outline-none transition-all text-[16px]"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="email" className="block text-[14px] mb-2 text-warm-grey">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  required
+                  value={formData1.email}
+                  onChange={(e) => setFormData1({ ...formData1, email: e.target.value })}
+                  className="w-full px-5 py-4 border-2 border-[#E4E0D8] rounded-sm bg-white focus:bg-[#FAFAF8] focus:border-[#4A4A4A] focus:outline-none transition-all text-[16px]"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="message" className="block text-[14px] mb-2 text-warm-grey">
+                  What brings you here?
+                </label>
+                <textarea
+                  id="message"
+                  rows="5"
+                  required
+                  value={formData1.message}
+                  onChange={(e) => setFormData1({ ...formData1, message: e.target.value })}
+                  className="w-full px-5 py-4 border-2 border-[#E4E0D8] rounded-sm bg-white focus:bg-[#FAFAF8] focus:border-[#4A4A4A] focus:outline-none transition-all resize-none text-[16px] leading-[1.7]"
+                ></textarea>
+              </div>
+              
+              <div className="text-center">
+                <button 
+                  type="submit" 
+                  className="button-primary"
+                  disabled={submitStatus1.loading}
+                >
+                  {submitStatus1.loading ? 'Sending...' : 'Send Message'}
+                </button>
+                {submitStatus1.error && (
+                  <p className="text-[14px] text-red-600 mt-4">{submitStatus1.error}</p>
+                )}
+                <p className="text-[14px] text-warm-grey mt-4">
+                  Or email directly: <a href="mailto:drdalsania@gmail.com" className="underline">drdalsania@gmail.com</a>
+                </p>
+              </div>
+            </form>
+          )}
         </div>
         
         {/* Form 2: Join the Journey */}
@@ -139,30 +191,58 @@ const Connect = () => {
             Join the Journey
           </h3>
           
-          <form onSubmit={handleJoinJourney} className="space-y-6 max-w-[540px] mx-auto">
-            <div>
-              <label htmlFor="reflection" className="block text-[14px] mb-2 text-warm-grey">
-                Share your reflection on where you are right now
-              </label>
-              <textarea
-                id="reflection"
-                rows="6"
-                required
-                value={formData2.reflection}
-                onChange={(e) => setFormData2({ ...formData2, reflection: e.target.value })}
-                className="w-full px-5 py-4 border-2 border-[#E4E0D8] rounded-sm bg-white focus:bg-[#FAFAF8] focus:border-[#4A4A4A] focus:outline-none transition-all resize-none text-[16px] leading-[1.7]"
-              ></textarea>
+          {submitStatus2.success ? (
+            <div className="text-center py-12 px-8 rounded-sm" style={{ backgroundColor: 'rgba(228, 224, 216, 0.3)' }}>
+              <p className="text-[20px] font-medium text-[#1A1A1A] mb-2">Welcome to the journey.</p>
+              <p className="text-[16px] text-warm-grey">Your reflection has been received.</p>
             </div>
-            
-            <div className="text-center">
-              <button type="submit" className="button-primary">
-                Begin the Journey
-              </button>
-              <p className="text-[14px] text-warm-grey mt-4">
-                This is a gentle first step. No pressure. Just presence.
-              </p>
-            </div>
-          </form>
+          ) : (
+            <form onSubmit={handleJoinJourney} className="space-y-6 max-w-[540px] mx-auto">
+              <div>
+                <label htmlFor="journey-email" className="block text-[14px] mb-2 text-warm-grey">
+                  Your Email
+                </label>
+                <input
+                  type="email"
+                  id="journey-email"
+                  required
+                  value={formData2.email}
+                  onChange={(e) => setFormData2({ ...formData2, email: e.target.value })}
+                  className="w-full px-5 py-4 border-2 border-[#E4E0D8] rounded-sm bg-white focus:bg-[#FAFAF8] focus:border-[#4A4A4A] focus:outline-none transition-all text-[16px]"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="reflection" className="block text-[14px] mb-2 text-warm-grey">
+                  Share your reflection on where you are right now
+                </label>
+                <textarea
+                  id="reflection"
+                  rows="6"
+                  required
+                  value={formData2.reflection}
+                  onChange={(e) => setFormData2({ ...formData2, reflection: e.target.value })}
+                  className="w-full px-5 py-4 border-2 border-[#E4E0D8] rounded-sm bg-white focus:bg-[#FAFAF8] focus:border-[#4A4A4A] focus:outline-none transition-all resize-none text-[16px] leading-[1.7]"
+                ></textarea>
+              </div>
+              
+              <div className="text-center">
+                <button 
+                  type="submit" 
+                  className="button-primary"
+                  disabled={submitStatus2.loading}
+                >
+                  {submitStatus2.loading ? 'Sending...' : 'Begin the Journey'}
+                </button>
+                {submitStatus2.error && (
+                  <p className="text-[14px] text-red-600 mt-4">{submitStatus2.error}</p>
+                )}
+                <p className="text-[14px] text-warm-grey mt-4">
+                  This is a gentle first step. No pressure. Just presence.
+                </p>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </section>
