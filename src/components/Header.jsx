@@ -38,6 +38,13 @@ const Header = () => {
             About
           </button>
           <button 
+            onClick={() => scrollToSection('clinic')} 
+            className="hover:underline transition-all duration-200 tracking-wide"
+            style={{ color: '#1A1A1A' }}
+          >
+            Clinic
+          </button>
+          <button 
             onClick={() => scrollToSection('what-i-do')} 
             className="hover:underline transition-all duration-200 tracking-wide whitespace-nowrap"
             style={{ color: '#1A1A1A' }}

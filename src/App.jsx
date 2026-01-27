@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Header from './components/Header';
 import Gateway from './components/Gateway';
 import About from './components/About';
+import Clinic from './components/Clinic';
 import WhatIDo from './components/WhatIDo';
 import Philosophy from './components/Philosophy';
 import Writings from './components/Writings';
@@ -20,6 +21,7 @@ function App() {
       <main>
         <Gateway />
         <About />
+        <Clinic />
         <WhatIDo />
         <Philosophy />
         <Writings />
